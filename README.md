@@ -18,7 +18,7 @@ Wails2 based on bun, svelte5 and shadcn.
   ```
   - Init. wails with template local folder
   ```sh
-  wails init -d . -n myapp -t ../wails2_sv5_bun/
+  wails init -d . -n myapp -t https://github.com/ericwu-glife/wails2_sv5_bun
   ```
   This creates the directory "mytest" with default files:
 

@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+
+    "configurations": [
+        {
+            "name": "Wails: Go",
+            "type": "go",
+            "request": "launch",
+            "mode": "exec",
+            "env": {
+                "WAILS_OUTPUT":""
+            },
+            "program": "${workspaceFolder}/build/bin/${config:WAILS2.OUTPUT}.exe",
+            "preLaunchTask": "task build"
+        },
+        {
+            "name": "Wails: Attach dlv",
+            "type": "go",
+            "request": "attach",
+            "mode": "remote",
+            "preLaunchTask": "task dev-dlv-attach",
+            "remotePath": "${workspaceFolder}",
+            "port": 10680,
+            "host": "127.0.0.1"
+        },
+        {
+            "name": "Wails: msedge",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:34115",
+            "webRoot": "${workspaceFolder}/frontend/src",
+            "runtimeArgs": [
+                "--inprivate",
+                "--remote-debugging-port=9222"
+            ],
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+              "${workspaceFolder}/frontend/**",
+              "!**/node_modules/**"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Wails: Compound",
+            "configurations": [ "Wails: msedge", "Wails: Attach dlv"]
+        }
+    ]
+}

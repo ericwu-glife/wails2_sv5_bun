@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "task build",
+      "command": "task",
+      "type": "shell",
+      "args": [ "jq-vscode-settings-json", "build-dev-win64"]
+    },
+    {
+      "label": "wails dev",
+      "type": "shell",
+      "command": "wails",
+      "args": [ "dev" ],
+      "isBackground": true,
+      "problemMatcher":{
+        "owner": "custom",
+        "pattern": {
+          "regexp": "__________________"
+        },
+        "background": {
+          "activeOnStart": false,
+          "beginsPattern": ".*",
+          "endsPattern": "To develop in the browser and call your bound Go methods*"
+        }
+      },
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    },
+    {
+      "label": "task dev-dlv-attach",
+      "type": "shell",
+      "command": "task",
+      "args": [ "dev-dlv-attach" ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "__________________"
+        },
+        "background": {
+          "activeOnStart": false,
+          "beginsPattern": ".*",
+          "endsPattern": "API server listening at: *"
+        }
+      },
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    },
+    {
+      "label": "stop wails dev",
+      "type": "shell",
+      "command": "powershell",
+      "args": [ "-Command", "Stop-Process -Name ${config:WAILS2.OUTPUT}-dev, wails, node, vite -Force"],
+      "presentation": {
+        "reveal": "silent",
+        "close": true
+      }
+    },
+    // {
+    //   "label": "dlv-server",
+    //   "type": "shell",
+      
+    // }
+  ]
+}

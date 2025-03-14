@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3" 
+vars:
+  WAILS2_OUTPUT:
+    sh: jq -r '.outputfilename' wails.json
+  DLV_PORT: 10680
+tasks:
+  build-dev-win64:
+    desc: go build dev to build/bin/{{.WAILS2_OUTPUT}}
+    platforms: [windows/amd64]
+    env:
+      CGO_ENABLED: 0
+    cmds:
+      - go build -tags dev -gcflags "all=-N -l" -o build/bin/{{.WAILS2_OUTPUT}}.exe
+    
+  jq-vscode-settings-json:
+    desc: set WAILS2_OUTPUT to settings.json of vscode with jq
+    cmds:
+      - >
+        jq '.WAILS2.OUTPUT |= "{{.WAILS2_OUTPUT}}"' ./.vscode/settings.json > ./.vscode/_settings.json
+        && powershell -Command "rm ./.vscode/settings.json"
+        && powershell -Command "mv ./.vscode/_settings.json ./.vscode/settings.json"
+  
+  dev-dlv-attach:
+    desc: try dlv attach {{.WAILS2_OUTPUT}}-dev, $pid=(Get-Process -Name {{.WAILS2_OUTPUT}}-dev).Id;
+    cmds: 
+      - >
+        powershell -Command "
+        dlv --listen=:{{.DLV_PORT}} --headless=true --api-version=2 --check-go-version=false --only-same-user=false attach (Get-Process -Name {{.WAILS2_OUTPUT}}-dev).Id
+        "
